@@ -29,9 +29,7 @@
                           ((rdf:about ,about))
                           (title ,channel-title)
                           (link ,channel-link)
-                          (description
-                          
-                           ,channel-description)
+                          (description ,channel-description)
                           (image ((rdf:resource ,channel-image)))
                           (items 
                                  (rdf:Seq  

@@ -77,19 +77,61 @@
     (cond ((response/full? returned-body) returned-body)
           (plain-text (basic-response (list returned-body)
                                       ;; Hey, this is probably where we go all unicode...
-                                      #:type #"text/plain;  charset=us-ascii"))
+                                      #:type #"text/xml;  charset=us-ascii"))
           (blank returned-body) ; the type of response is default (text/html)
           (a-design (a-design returned-body))
-          (else (let ((main `(html (head ,@(map css-inc css)
+          (else (let ((main `(html
+                                   (head ,@(map css-inc css)
                                          ,@(map atom-inc atom-feed)
                                          ,@(map rss-inc rss-feed)
                                          ,@(map js-inc js)
                                          ,@(map raw-str raw-header)
                                          (title ,title))
                                    (body ,body-attrs ,(body-wrap returned-body)))))
-                  (if doc-type
+                   (if doc-type
                       `(group ,(raw-str doc-type) ,main)
-                      main))))))
+                      main)
+                    
+                      )))))
+
+
+(define (page-RDFa
+              #:doc-type (doc-type
+                      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa 1.0//EN\"
+    \"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd\">")
+              #:raw-header (raw-header '())
+              #:css (css '())
+              #:js (js '())
+              #:atom-feed (atom-feed '())
+              #:rss-feed (rss-feed '())
+              #:title (title "a LeftParen web app")
+              #:body-attrs (body-attrs '())
+              #:body-wrap (body-wrap (lambda (body) body))
+              #:blank (blank #f)
+              #:plain-text (plain-text #f)
+              #:design (a-design #f)
+              . body)
+  (let ((returned-body (last body)))
+    (cond ((response/full? returned-body) returned-body)
+          (plain-text (basic-response (list returned-body)
+                                      ;; Hey, this is probably where we go all unicode...
+                                      #:type #"text/plain;  charset=us-ascii"))
+          (blank returned-body) ; the type of response is default (text/html)
+          (a-design (a-design returned-body))
+          (else (let ((main `(html
+                              ((xmmlns "http://www.w3.org/1999/xhtml")
+                               (xmlns:foaf "http://xmlns.com/foaf/0.1/")
+                               (xmlns:dc
+                                "http://purl.org/dc/elements/1.1/")
+                               (xml:lang "en"))
+                              (head ,@(map css-inc css)
+                                    ,@(map atom-inc atom-feed)
+                                    ,@(map rss-inc rss-feed)
+                                    ,@(map js-inc js)
+                                    ,@(map raw-str raw-header)
+                                    (title ,title))
+                              (body ,body-attrs ,(body-wrap returned-body)))))
+                  `(group ,(raw-str "<?xml version=\"1.0\" encoding=\"utf-8\"?>") ,(raw-str doc-type) ,main))))))
 
 ;;
 ;; design
