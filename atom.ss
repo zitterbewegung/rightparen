@@ -28,7 +28,7 @@
                               (updated ,(atom-time-str (current-seconds))" ")
                               (author (name ,author-name)
                                       (email ,author-email))
-                              (id ,(urn)) ,body))))
+                              (id ,(urn)) ,@body))))
 
 (define (atom-item item-title item-link item-summary item-content)
  `(entry
