@@ -91,8 +91,7 @@
                    (if doc-type
                       `(group ,(raw-str doc-type) ,main)
                       main)
-                    
-                      )))))
+)))))
 
 
 (define (page-RDFa
