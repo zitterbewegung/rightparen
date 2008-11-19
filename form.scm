@@ -94,6 +94,7 @@
                   #:class (css-class #f)
                   #:auto-submit (auto-submit #f)
                   #:return-form-obj (return-form-obj #f)
+                  #:input-id (input-id #f)
                   #:on-done (on-done (lambda (rec) (redirect-to (setting *WEB_APP_URL*)))))
   (let ((init-data (if (rec? init) (rec-data init) init))
         (is-upload (has-upload-field? fields)))
@@ -142,6 +143,7 @@
                  ,@(if on-submit `((onsubmit ,on-submit)) '()))
                 ,@(splice-if error-msg `(div ((class "errors")) ,error-msg))
                 (input ((type "hidden")
+                        (id ,input-id)
                         (name ,(symbol->string (setting *CLOSURE_URL_KEY*)))
                         (value ,(body-as-closure-key (req) (store-form-rec! req)))))
                 ,@(form-body fields submit-label init-data form-id
