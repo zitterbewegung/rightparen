@@ -94,7 +94,7 @@
                   #:class (css-class #f)
                   #:auto-submit (auto-submit #f)
                   #:return-form-obj (return-form-obj #f)
-                  #:input-id (input-id #f)
+                  #:input-id (input-id "none")
                   #:on-done (on-done (lambda (rec) (redirect-to (setting *WEB_APP_URL*)))))
   (let ((init-data (if (rec? init) (rec-data init) init))
         (is-upload (has-upload-field? fields)))
